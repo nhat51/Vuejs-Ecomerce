@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import {productsRoute} from "@/pages/product";
+import {cartRoute} from "@/pages/cart";
 
 
 Vue.use(VueRouter)
 
 const routes = [
-    ...productsRoute
+    ...productsRoute,
+    ...cartRoute
 ]
 
 const router = new VueRouter({

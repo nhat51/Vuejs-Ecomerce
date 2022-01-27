@@ -20,7 +20,7 @@
       <a-input v-model="form.thumbnail"/>
     </a-form-item>
     <a-form-item :wrapper-col="{ span: 12, offset: 5 }">
-      <a-button type="primary" html-type="submit" @click="handleSubmit">
+      <a-button type="primary" html-type="submit" @click.stop.prevent="handleSubmit">
         Submit
       </a-button>
     </a-form-item>
@@ -60,9 +60,7 @@ export default {
       },
       handleSubmit(){
         ProductService.save(this.form).then(
-            res => {
-              console.log(res)
-            }
+              this.$router.push("/products/list")
         ).catch(error => {
           console.log(error)
         })

@@ -25,7 +25,6 @@ const routes = [
                     title: 'Create Product'
                 }
             },
-
             {
                 path: 'detail/:id',
                 component:()=> import('./Detail'),
@@ -33,7 +32,15 @@ const routes = [
                 meta: {
                     title: 'Detail Product'
                 }
-            }
+            },
+            {
+                path: 'edit/:id',
+                component:()=> import('./edit'),
+                name:'editProduct',
+                meta: {
+                    title: 'Edit Product'
+                }
+            },
         ]
     }
 ]

@@ -25,9 +25,6 @@
     </a-layout-sider>
     <a-layout>
       <a-layout-header style="background: #fff; padding: 0 16px; text-align: right;">
-        <a-input style="width: 500px" placeholder="Search....">
-          <a-icon type="search"/>
-        </a-input>
       </a-layout-header>
       <a-layout-content style="margin: 16px">
         <router-view :key="$route.fullPath"></router-view>
