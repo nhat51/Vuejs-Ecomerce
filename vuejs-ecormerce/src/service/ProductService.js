@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL_PRODUCTS = "http://localhost:8080/api/v1/products";
+const URL_PRODUCTS = "http://localhost:8081/api/v1/products";
 
 class ProductService {
 

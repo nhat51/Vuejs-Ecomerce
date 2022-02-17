@@ -5,25 +5,25 @@
         <span slot="thumbnail" slot-scope="text">
              <img :src="text" style="width: 100%">
          </span>
-        <div slot="action" slot-scope="text,data">
-          <a class="button" @click="showDeleteConfirm(data.id)">
+        <div slot="action" slot-scope="text,record">
+          <a class="button" @click="confirmRemove(record.id)">
             <a-icon type="delete"/>
           </a>
         </div>
       </a-table>
       <div>
-        <a-form :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }" >
+        <a-form  :form="form" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }" >
           <a-form-item label="Total Price">
             <a-input disabled v-model="cartData.totalPrice"/>
           </a-form-item>
-          <a-form-item label="Ship name">
-           <a-input/>
+          <a-form-item  label="Ship name">
+           <a-input v-model="form.shipName"/>
           </a-form-item>
           <a-form-item label="Ship Address">
-           <a-input/>
+           <a-input v-model="form.shipAddress"/>
           </a-form-item>
           <a-form-item :wrapper-col="{ span: 12, offset: 5 }">
-            <a-button type="primary" html-type="submit">
+            <a-button type="primary" html-type="submit" @click.stop.prevent="submitOrder">
               Submit Cart
             </a-button>
           </a-form-item>
@@ -82,6 +82,10 @@ export default {
       columns,
       params:{
 
+      },
+      form:{
+        shipName: undefined,
+        shipAddress: undefined
       }
     };
   },
@@ -92,10 +96,35 @@ export default {
     getCart(){
       CartService.getCart().then(
           rs =>{
-            console.log(rs.data.data.items)
+            console.log(rs.data.data)
             this.cartData = rs.data.data
             this.cartItems = rs.data.data.items;
           }
+      )
+    },
+    confirmRemove(id){
+      this.$confirm({
+        title: 'Do you want remove this product',
+        onOk: () => {
+          this.removeProduct(id)
+        },
+        onCancel() {
+          console.log("Cancel")
+        }
+      })
+    },
+    removeProduct(id){
+      CartService.remove(id).then(
+          rs =>{
+            console.log(rs.data)
+          }
+      )
+      this.getCart()
+    },
+    submitOrder(){
+      CartService.submitOrder(this.form).then(()=>{
+            console.log("Đặt đươc dồi")
+      }
       )
     }
 

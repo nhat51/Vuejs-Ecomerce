@@ -69,17 +69,17 @@
         <span slot="thumbnail" slot-scope="text">
              <img :src="text" style="width: 100%">
          </span>
-        <div slot="action" slot-scope="text,data">
-          <a class="button" @click="showDeleteConfirm(data.id)">
+        <div slot="action" slot-scope="text,record">
+          <a class="button" @click="showDeleteConfirm(record.id)">
             <a-icon type="delete"/>
           </a> |
-          <a class="button" :href="'/products/edit/'+ data.id ">
+          <a class="button" :href="'/products/edit/'+ record.id ">
             <a-icon type="edit"/>
           </a> |
-          <a class="button" :href="'/products/detail/'+ data.id ">
+          <a class="button" :href="'/products/detail/'+ record.id ">
             <a-icon type="info-circle"/>
           </a> |
-          <a class="button" :href="'/products/detail/'+ data.id ">
+          <a class="button" @click="addToCart(record.id)">
             <a-icon type="shopping-cart"/>
           </a>
         </div>
@@ -99,6 +99,7 @@
 <script>
 import ProductService from "@/service/ProductService";
 import CategoryService from "@/service/CategoryService";
+import CartService from "@/service/CartService";
 
 
 const columns = [
@@ -152,8 +153,15 @@ export default {
   data() {
     return {
       data: [],
+      form: {
+        productId: undefined,
+        quantity: 1
+      },
       columns,
-      body:{},
+      body:{
+        productId:undefined,
+        quantity: 1
+      },
       totalRecords: undefined,
       categories:[],
       params: {
@@ -183,7 +191,6 @@ export default {
     getCategorise(){
       CategoryService.getAll().then(
           res => {
-            console.log(res.data)
             this.categories = res.data.data
           }
       )
@@ -228,15 +235,14 @@ export default {
         page: undefined,
       }
     },
-    addToCart(){
+    addToCart(id){
+      this.form.productId = id
+        CartService.addToCart(this.form).then(response => {
+          console.log(response)
+          this.$message.success("add to cart success")
+        })
 
-    },
- /*   convertProductToCartItem(product){
-      const id = product.id;
-      const unitPrice = product.price;
-      const thumbnail = product.thumbnail;
-      const productName = product.name
-    }*/
+    }
   }
 };
 </script>

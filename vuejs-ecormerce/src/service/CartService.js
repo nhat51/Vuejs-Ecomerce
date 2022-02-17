@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL_PRODUCTS = "http://localhost:8080/api/v1/cart";
+const URL_PRODUCTS = "http://localhost:8081/api/v1/cart";
 const access_token = "qwerty";
 class ProductService {
 
@@ -10,17 +10,19 @@ class ProductService {
         });
     }
     addToCart(body){
-        return axios.post(URL_PRODUCTS + "/add/" + `/?access_token=${access_token}`, {
-            params: body}
-        );
+        return axios.post(URL_PRODUCTS + "/add" + `?access_token=${access_token}`, body);
     }
-    remove(){
-        return axios.put(URL_PRODUCTS + "/update/" + `/?access_token=${access_token}`,access_token)
+    remove(id){
+        return axios.put(URL_PRODUCTS + "/update" + `?access_token=${access_token}`,{
+            params: id
+        })
     }
     clear(){
-        return axios.delete(URL_PRODUCTS + "/clear/"+ `/?access_token=${access_token}`)
+        return axios.delete(URL_PRODUCTS + "/clear"+ `?access_token=${access_token}`)
     }
-
+    submitOrder(body){
+        return axios.post(URL_PRODUCTS + "/submitOrder" + `?access_token=${access_token}`,body)
+    }
 
 }
 
