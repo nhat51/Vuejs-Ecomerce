@@ -6,7 +6,7 @@
              <img :src="text" style="width: 100%">
          </span>
         <div slot="action" slot-scope="text,record">
-          <a class="button" @click="confirmRemove(record.id)">
+          <a class="button" @click="confirmRemove(record.productId)">
             <a-icon type="delete"/>
           </a>
         </div>
@@ -17,10 +17,12 @@
             <a-input disabled v-model="cartData.totalPrice"/>
           </a-form-item>
           <a-form-item  label="Ship name">
-           <a-input v-model="form.shipName"/>
+           <a-input v-model="form.shipName"
+                    />
           </a-form-item>
           <a-form-item label="Ship Address">
-           <a-input v-model="form.shipAddress"/>
+           <a-input v-model="form.shipAddress"
+                    />
           </a-form-item>
           <a-form-item :wrapper-col="{ span: 12, offset: 5 }">
             <a-button type="primary" html-type="submit" @click.stop.prevent="submitOrder">
@@ -86,6 +88,11 @@ export default {
       form:{
         shipName: undefined,
         shipAddress: undefined
+      },
+      rules:{
+        name:[
+          { required: true, message: 'Please input ship name', trigger: 'blur' },
+        ]
       }
     };
   },
@@ -107,6 +114,7 @@ export default {
         title: 'Do you want remove this product',
         onOk: () => {
           this.removeProduct(id)
+          window.location.reload()
         },
         onCancel() {
           console.log("Cancel")
@@ -117,6 +125,7 @@ export default {
       CartService.remove(id).then(
           rs =>{
             console.log(rs.data)
+            console.log(this.$route.params)
           }
       )
       this.getCart()
@@ -124,6 +133,7 @@ export default {
     submitOrder(){
       CartService.submitOrder(this.form).then(()=>{
             console.log("Đặt đươc dồi")
+        window.location.reload()
       }
       )
     }

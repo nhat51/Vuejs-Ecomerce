@@ -13,9 +13,7 @@ class ProductService {
         return axios.post(URL_PRODUCTS + "/add" + `?access_token=${access_token}`, body);
     }
     remove(id){
-        return axios.put(URL_PRODUCTS + "/update" + `?access_token=${access_token}`,{
-            params: id
-        })
+        return axios.delete(URL_PRODUCTS + "/remove" + `?access_token=${access_token}`  + `&productId=${id}`)
     }
     clear(){
         return axios.delete(URL_PRODUCTS + "/clear"+ `?access_token=${access_token}`)
