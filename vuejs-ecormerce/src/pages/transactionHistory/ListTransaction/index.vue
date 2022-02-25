@@ -2,10 +2,10 @@
   <a-table :pagination="false"  :columns="columns" :data-source="data">
     <a slot="name" slot-scope="text">{{ text }}</a>
     <span slot="customTitle"> Id</span>
-    <span slot="status" slot-scope="inventory_status">
+    <span slot="status" slot-scope="status">
       <a-tag
-          :key="inventory_status"
-          :color="inventory_status === 'REJECT' ? 'volcano' : inventory_status === 'CONFIRM' ? 'geekblue' : 'green'"
+          :key="status"
+          :color="status === 'REJECT' ? 'volcano' : status === 'CONFIRM' ? 'geekblue' : 'green'"
       >
         {{ status.toUpperCase() }}
       </a-tag>
@@ -21,7 +21,7 @@
   </a-table>
 </template>
 <script>
-import OrderService from "@/service/OrderService";
+
 
 const columns = [
   {
@@ -31,33 +31,39 @@ const columns = [
     scopedSlots: { customRender: 'id' },
   },
   {
-    title: 'Ship name',
-    dataIndex: 'shipName',
-    key: 'shipName',
+    title: 'Amount',
+    dataIndex: 'amount',
+    key: 'amount',
   },
   {
-    title: 'Ship address',
-    dataIndex: 'shipAddress',
-    key: 'shipAddress',
+    title: 'Message',
+    dataIndex: 'message',
+    key: 'message',
   },
   {
-    title: 'Customer id',
-    dataIndex: 'customerId',
-    key: 'customerId',
+    title: 'Order Id',
+    dataIndex: 'order_id',
+    key: 'order_id',
   },
   {
-    title: 'Total price',
-    dataIndex: 'totalPrice',
-    key: 'totalPrice',
+    title: 'Payment Type',
+    dataIndex: 'payment_type',
+    key: 'payment_type',
   },
   {
-    title: 'Status Inventory',
-    key: 'inventory_status',
-    dataIndex: 'inventory_status',
-    scopedSlots: { customRender: 'inventory_status' },
+    title: 'Receive id',
+    key: 'receive_id',
+    dataIndex: 'receive_id',
+    scopedSlots: { customRender: 'status' },
   },
   {
-    title: 'Payment Status',
+    title: 'Sender id',
+    key: 'payment_status',
+    dataIndex: 'payment_status',
+    scopedSlots: { customRender: 'payment' },
+  },
+  {
+    title: 'Status',
     key: 'payment_status',
     dataIndex: 'payment_status',
     scopedSlots: { customRender: 'payment' },
@@ -72,15 +78,10 @@ export default {
     };
   },
   created() {
-    this.getOrders()
+
   },
   methods:{
-    getOrders(){
-      OrderService.getAll().then(rs=>{
-        console.log(rs.data)
-        this.data = rs.data.data
-      })
-    }
+
   }
 };
 </script>

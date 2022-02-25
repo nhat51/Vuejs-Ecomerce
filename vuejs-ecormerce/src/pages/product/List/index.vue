@@ -16,14 +16,14 @@
             </a-select>
           </a-form-item>
           <a-form-item>
-            <a-select placeholder="Min price" v-model="params.minPrice">
-              <a-select-option :value="100000">
+            <a-select placeholder="Min price" v-model="params.maxPrice">
+              <a-select-option :value="10000">
                 10.000
               </a-select-option>
-              <a-select-option :value="200000">
+              <a-select-option :value="20000">
                 20.000
               </a-select-option>
-              <a-select-option :value="300000">
+              <a-select-option :value="30000">
                 30.000
               </a-select-option>
               <a-select-option :value="40000">
@@ -32,7 +32,7 @@
             </a-select>
           </a-form-item>
           <a-form-item>
-            <a-select placeholder="Max price" v-model="params.maxPrice">
+            <a-select placeholder="Max price" v-model="params.minPrice">
               <a-select-option :value="100000">
                 100.000
               </a-select-option>
@@ -79,7 +79,7 @@
           <a class="button" :href="'/products/detail/'+ record.id ">
             <a-icon type="info-circle"/>
           </a> |
-          <a class="button" @click="addToCart(record.id)">
+          <a class="button" @click="addToCart(record.id,record.name,record.thumbnail,record.price)">
             <a-icon type="shopping-cart"/>
           </a>
         </div>
@@ -126,6 +126,11 @@ const columns = [
     key: 'price',
   },
   {
+    title: 'In stock',
+    dataIndex: 'inStock',
+    key: 'inStock',
+  },
+  {
     title: 'Category',
     dataIndex: 'category',
     key: 'category',
@@ -155,13 +160,19 @@ export default {
       data: [],
       form: {
         productId: undefined,
-        quantity: 1
+        productName:undefined,
+        thumbnail:undefined,
+        unitPrice:undefined,
+        quantity:1
       },
       columns,
-      body:{
-        productId:undefined,
-        quantity: 1
-      },
+      /*body:{
+        productId: undefined,
+        productName:undefined,
+        thumbnail:undefined,
+        unitPrice:undefined,
+        quantity:1
+      },*/
       totalRecords: undefined,
       categories:[],
       params: {
@@ -183,7 +194,8 @@ export default {
     getProducts() {
       ProductService.getAll(this.params).then(
           rs => {
-            this.data = rs.data.data;
+            console.log(rs.data.data)
+            this.data = rs.data.data.content;
             this.totalRecords = rs.data.pagination.totalItems
           }
       )
@@ -191,6 +203,7 @@ export default {
     getCategorise(){
       CategoryService.getAll().then(
           res => {
+            console.log(res.data.data)
             this.categories = res.data.data
           }
       )
@@ -223,7 +236,6 @@ export default {
     handleSearch(e){
       e.preventDefault();
       this.params.page = 1;
-      console.log(this.params);
       this.getProducts();
     },
     resetButton(){
@@ -235,8 +247,12 @@ export default {
         page: undefined,
       }
     },
-    addToCart(id){
-      this.form.productId = id
+    addToCart(id,name,thumbnail,unitPrice){
+      console.log(id,name,thumbnail,unitPrice)
+      this.form.productId = id;
+      this.form.productName = name;
+      this.form.thumbnail = thumbnail;
+      this.form.unitPrice = unitPrice;
         CartService.addToCart(this.form).then(response => {
           console.log(response)
           this.$message.success("add to cart success")

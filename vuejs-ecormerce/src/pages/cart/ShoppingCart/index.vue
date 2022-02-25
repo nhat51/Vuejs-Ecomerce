@@ -89,11 +89,6 @@ export default {
         shipName: undefined,
         shipAddress: undefined
       },
-      rules:{
-        name:[
-          { required: true, message: 'Please input ship name', trigger: 'blur' },
-        ]
-      }
     };
   },
   created() {
